@@ -45,16 +45,24 @@ class NewsHeadlines extends StatefulWidget{
 // Here is the state for the above Stateful Widget
 class NewsHeadlinesState extends State<NewsHeadlines>{
 
+
+  static const String _page = 'page';
+  static const String _grid = 'grid';
+
   PageController _pageController;
+  //ValueNotifier<PopupMenuList> _selectedMenuItem;
+  String _selectedMenuItem = 'page';
   var _currentPage = 0.0;
   Future<List<Headlines>> _headlines;
   bool _showDescription = false;
+  bool isGridview = false;
 
   @override
   void initState() {
     super.initState();
 
     _headlines = getJson();  // get the headlines by making the http request
+    //_selectedMenuItem = ValueNotifier<PopupMenuList>(PopupMenuList.PageView);
     _pageController = new PageController();  // Initialize page controller and add listener to update the current page value
     _pageController.addListener((){
       setState(() {
@@ -83,54 +91,42 @@ class NewsHeadlinesState extends State<NewsHeadlines>{
           ),
         ),
         centerTitle: true,
+
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.hdr_strong,),
+          PopupMenuButton(
+            onSelected: (value){
+                  setState(() {
+                    _selectedMenuItem = value;
+                    switch(_selectedMenuItem){
+                      case  _page:
+                        isGridview = false;
+                        break;
+                      case _grid:
+                        isGridview = true;
+                        break;
+                      default:
+                        isGridview = false;
+                        break;
+                    }
+                  });
+            },
+            itemBuilder: (BuildContext context) => [
+              CheckedPopupMenuItem(
+                checked: _selectedMenuItem == _page,
+                value: _page,
+                child: new Text('Page View'),
+              ),
+              new CheckedPopupMenuItem(
+                checked: _selectedMenuItem == _grid,
+                value: _grid,
+                child: new Text('Grid view'),
+              ),
+            ],
           )
         ],
       ),
 
-      body: FutureBuilder<List<Headlines>>(
-        future: _headlines,
-        builder: (context,snapshot){
-
-          if (!snapshot.hasData){
-            return new Container(
-              child: new Center(
-                      child: new CircularProgressIndicator(),
-              ),
-            );
-          }
-
-          return PageView.builder(
-              controller: _pageController,
-              pageSnapping: false,
-              itemCount: snapshot.data.length,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, position){
-
-                Headlines headline = snapshot.data[position];
-
-                if (position == _currentPage.floor()){
-                  
-                  return Transform(
-                    transform: Matrix4.identity()..rotateX(_currentPage - position),
-                      child: buildAnimatedNewsContainer(headline, context, _currentPage - position));
-                  
-                }else if(position == _currentPage.floor()+1){
-                  
-                  return Transform(
-                      transform: Matrix4.identity()..rotateY(_currentPage - position),
-                      child: buildAnimatedNewsContainer(headline, context, _currentPage - position));
-                  
-                }else {
-                  
-                  return buildAnimatedNewsContainer(headline, context, _currentPage - position);
-                  
-                }
-              });
-          }),
+      body: isGridview ? gridViewNews(context, _headlines): pageViewNews(context, _headlines),
     );
   }
 
@@ -176,7 +172,6 @@ class NewsHeadlinesState extends State<NewsHeadlines>{
                            _showDescription = !_showDescription;
                          });
                        },
-
                        child: Stack(
                          children: <Widget>[
 
@@ -257,90 +252,257 @@ class NewsHeadlinesState extends State<NewsHeadlines>{
                  ),
              );
   }
-}
-//This function return the Widget which shows the details of the news
-Widget detailedNewsWidget(Headlines headline) {
 
-  var date = DateTime.parse(headline.publishedAt);
-  var dateStr = formatDate(date, [dd,' ', M, ' ', yyyy]);//'\n', HH, ':', nn,
+  Widget pageViewNews(BuildContext context, Future<List<Headlines>> headlines){
+    return FutureBuilder<List<Headlines>>(
+        future: _headlines,
+        builder: (context,snapshot){
 
-  return Container(
-    alignment: Alignment.center,
-
-    child: Column(
-      children: <Widget>[
-
-      Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right:2.0),
-              child: Icon(
-                  Icons.calendar_today,
-                  size: 15.0,
+          if (!snapshot.hasData){
+            return new Container(
+              child: new Center(
+                child: new CircularProgressIndicator(),
               ),
+            );
+          }
+
+          return PageView.builder(
+              controller: _pageController,
+              pageSnapping: false,
+              itemCount: snapshot.data.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, position){
+
+                Headlines headline = snapshot.data[position];
+
+                if (position == _currentPage.floor()){
+
+                  return Transform(
+                      transform: Matrix4.identity()..rotateX(_currentPage - position),
+                      child: buildAnimatedNewsContainer(headline, context, _currentPage - position));
+
+                }else if(position == _currentPage.floor()+1){
+
+                  return Transform(
+                      transform: Matrix4.identity()..rotateY(_currentPage - position),
+                      child: buildAnimatedNewsContainer(headline, context, _currentPage - position));
+
+                }else {
+
+                  return buildAnimatedNewsContainer(headline, context, _currentPage - position);
+
+                }
+              });
+        });
+  }
+
+
+  //This function return the Widget which shows the details of the news in Page View
+  Widget detailedNewsWidget(Headlines headline) {
+
+    var date = DateTime.parse(headline.publishedAt);
+    var dateStr = formatDate(date, [dd,' ', M, ' ', yyyy]);//'\n', HH, ':', nn,
+
+    return Container(
+      alignment: Alignment.center,
+
+      child: Column(
+        children: <Widget>[
+
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right:2.0),
+                  child: Icon(
+                    Icons.calendar_today,
+                    size: 15.0,
+                  ),
+                ),
+                Text(
+                  dateStr,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 14.0
+                  ),
+                ),
+              ],
             ),
-            Text(
-            dateStr,
+          ),
+
+          Padding(padding: EdgeInsets.all(2.0)),
+
+          Text(headline.title != null ? headline.title:'',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
-                fontSize: 14.0
+                fontSize: 24.0
             ),
+          ),
+
+          Padding(padding: EdgeInsets.all(5.0)),
+
+          Text(headline.description != null ? headline.description:'',
+            style: TextStyle(
+                color: Colors.black87,
+                fontSize: 18.0
             ),
-          ],
-        ),
-      ),
-
-      Padding(padding: EdgeInsets.all(2.0)),
-
-      Text(headline.title,
-            style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: 24.0
-        ),
-      ),
-
-      Padding(padding: EdgeInsets.all(5.0)),
-
-      Text(headline.description,
-            style: TextStyle(
-            color: Colors.black87,
-            fontSize: 18.0
           ),
-        ),
 
-        Padding(padding: EdgeInsets.all(5.0)),
+          Padding(padding: EdgeInsets.all(5.0)),
 
-        Text(headline.content != null ? headline.content:'',
-          style: TextStyle(
-              color: Colors.black87,
-              fontSize: 18.0
-          ),
-        ),
-
-        Padding(padding: EdgeInsets.all(10.0)),
-
-        RichText(
-          text: TextSpan(
-            text: 'Click here for source',
+          Text(headline.content != null ? headline.content:'',
             style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.underline,
-              fontSize: 12.0
+                color: Colors.black87,
+                fontSize: 18.0
             ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                if(headline.url != null) {
-                  launch(headline.url);
-                }
-              },
           ),
-        ),
-    ],
+
+          Padding(padding: EdgeInsets.all(10.0)),
+
+          RichText(
+            text: TextSpan(
+              text: 'Click here for source',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                  fontSize: 12.0
+              ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  if(headline.url != null) {
+                    launch(headline.url);
+                  }
+                },
+            ),
+          ),
+        ],
       ),
-  );
+    );
+  }
+
+  // This function return grid view of the headlines using CustomScrollView - slivers
+  Widget gridViewNews(BuildContext context, Future<List<Headlines>> headlines){
+    return FutureBuilder<List<Headlines>>(
+        future: headlines,
+        builder: (context,snapshot){
+
+          if (!snapshot.hasData){
+            return new Container(
+              child: new Center(
+                child: new CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          return CustomScrollView(
+            primary: false,
+            slivers: <Widget>[
+              SliverPadding(
+                padding: const EdgeInsets.all(8.0),
+                sliver: SliverGrid.count(
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 2,
+                    children: newsCardItem(snapshot.data, context)
+                ),)
+            ],
+          );
+        });
+  }
+
+  // This function returns the list of all the news cards for the grid view
+  List<Widget> newsCardItem(List<Headlines> data, BuildContext context) {
+
+    List<Widget> newsHeadlinesWidget = new List<Widget>();
+    if(data.isNotEmpty){
+      for(int i=0; i<data.length; i++){
+        Headlines headline = data[i];
+
+        Widget widget = Card(
+          margin: EdgeInsets.all(2.0),
+          elevation: 8.0,
+          child: GridTile(
+            child: headline.urlToImage != null ? CachedNetworkImage(
+              imageUrl: headline.urlToImage,
+              fit: BoxFit.fill,
+              placeholder: (context, url) => Image.network(url),
+              errorWidget: (context, url, error) => new Icon(Icons.error),
+            ) : Image.asset('images/error_bk.png'),
+            footer: GridTileBar(
+              backgroundColor: Colors.black54,
+              title: Container(
+                child: Padding(
+                    padding: EdgeInsets.all(0.0),
+                    child: Text(headline.title,
+                      maxLines: 3,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold
+                      ),)
+                ),
+              ),
+            ),
+          ),
+        );
+
+        newsHeadlinesWidget.add(widget);
+      }
+      return newsHeadlinesWidget;
+    }else{
+      return [Text('No Data')];
+    }
+  }
+
 }
+
+// enum is created for the Popup menu item list
+enum PopupMenuList{
+  PageView,
+  GridView
+}
+
+/*
+
+              These were various methods tried to build the popup menu
+               ~ Using RadioListTile ~
+              return List<PopupMenuEntry<PopupMenuList>>.generate(
+                PopupMenuList.values.length,
+                  (int index){
+                  return PopupMenuItem(
+                    value: PopupMenuList.values[index],
+                    child: AnimatedBuilder(
+                        animation: _selectedMenuItem,
+                        builder: (BuildContext context, Widget child){
+                          return RadioListTile<PopupMenuList>(
+                              title: child,
+                              value: PopupMenuList.values[index],
+                              groupValue: _selectedMenuItem.value,
+                              onChanged: (PopupMenuList menuList){
+                                _selectedMenuItem.value = menuList;
+                              });
+                        }),
+                  );
+                  }
+              );
+              ~ Normal Popup menu ~
+              return PopupMenuList.options.map((String option){
+                return PopupMenuItem<String>(
+                  value: option,
+                  child: Container(
+                    color: Colors.black,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle
+                    ),
+                    child: Text(option,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black
+                    ),
+                    ),
+                  ),
+                );
+              }).toList();
+              */

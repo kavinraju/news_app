@@ -66,46 +66,49 @@ class NewsHeadlinesState extends State<NewsHeadlines>{
         ),
       ),*/
 
-      body: FutureBuilder<List<Headlines>>(
-          future: headlines,
-          builder: (context,snapshot){
-
-            if (!snapshot.hasData){
-              return new Container(
-                child: new Center(
-                  child: new CircularProgressIndicator(),
-                ),
-              );
-            }
-
-            print('Text: ${snapshot.data[3].description}');
-            return CustomScrollView(
-              primary: false,
-              slivers: <Widget>[
-                SliverAppBar(
-                  title: Text('News app'),
-                  elevation: 8.0,
-                  centerTitle: true,
-                  floating: true,
-                  snap: true,
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(8.0),
-                  sliver: SliverGrid.count(
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 2,
-                    children: newsCardItem(snapshot.data, context),
-
-
-                  ),)
-              ],
-            );
-          }),
+      body: gridViewNews(context),
     );
   }
 
+  Widget gridViewNews(BuildContext context){
+    return FutureBuilder<List<Headlines>>(
+        future: headlines,
+        builder: (context,snapshot){
+
+          if (!snapshot.hasData){
+            return new Container(
+              child: new Center(
+                child: new CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          print('Text: ${snapshot.data[3].description}');
+          return CustomScrollView(
+            primary: false,
+            slivers: <Widget>[
+              SliverAppBar(
+                title: Text('News app'),
+                elevation: 8.0,
+                centerTitle: true,
+                floating: true,
+                snap: true,
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.all(8.0),
+                sliver: SliverGrid.count(
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  children: newsCardItem(snapshot.data, context),
+
+
+                ),)
+            ],
+          );
+        });
+  }
   List<Widget> newsCardItem(List<Headlines> data, BuildContext context) {
 
     List<Widget> newsHeadlinesWidget = new List<Widget>();
