@@ -2,6 +2,8 @@
 
 This app was made while learning Flutter. News are fetched from ![News API](https://newsapi.org/). Currently this app fetches data only the ![headlines](https://newsapi.org/docs/endpoints/top-headlines).
 
+This project can be used to get started with ![Flutter](https://flutter.dev) for an Android Developer to know the code flow. It takes some time to adapt rom Native Development to Declaraive type framework, but understanding the codeflow will be truely helpful to make it possible. This project is my First Flutter app for me. 
+
 ## Screenshots
 ![device-2019-06-10-164241](https://user-images.githubusercontent.com/24537737/59193347-07e6b100-8ba3-11e9-89d5-98720f00e54a.png)<br>
 ![device-2019-06-10-164317](https://user-images.githubusercontent.com/24537737/59193349-087f4780-8ba3-11e9-9cde-62d3d73409cb.png)<br>
@@ -20,11 +22,11 @@ This app was made while learning Flutter. News are fetched from ![News API](http
   <b>9</b> Icon <br>
   <b>10</b> Card <br>
   <b>11</b> CircularProgressIndicator<br>
-  <b>12</b> PageView.builder<br>
+  <b>12</b> ![PageView](https://medium.com/flutter-community/a-deep-dive-into-pageview-in-flutter-with-custom-transitions-581d9ea6dded).builder<br>
   <b>13</b> Transform<br>
   <b>14</b> Future, FutureBuilder<br>
-  <b>15</b> PopupMenuButton<br>
-  <b>16</b> CheckedPopupMenuItem<br>
+  <b>15</b> ![PopupMenuButton](https://api.flutter.dev/flutter/material/PopupMenuButton-class.html)<br>
+  <b>16</b> ![CheckedPopupMenuItem](https://api.flutter.dev/flutter/material/CheckedPopupMenuItem-class.html)<br>
   <b>17</b> RichText<br>
   <b>18</b> TapGestureRecognizer - for opening URL in a Text widget<br>
   <b>19</b> CustomScrollView<br>
