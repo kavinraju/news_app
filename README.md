@@ -3,30 +3,30 @@
 This app was made while learning Flutter.
 
 ### Widgets used:
-  <b>1</b> StatefulWidget
-  <b>2</b> MaterialApp
-  <b>3</b> Scaffold
-  <b>4</b> Container
-  <b>5</b> Center
-  <b>6</b> Text 
-  <b>7</b> Row 
-  <b>8</b> Padding 
-  <b>9</b> Icon 
-  <b>10</b> Card 
-  <b>11</b> CircularProgressIndicator
-  <b>12</b> PageView.builder
-  <b>13</b> Transform
+  <b>1</b> StatefulWidget <br>
+  <b>2</b> MaterialApp <br>
+  <b>3</b> Scaffold <br>
+  <b>4</b> Container<br>
+  <b>5</b> Center<br>
+  <b>6</b> Text <br>
+  <b>7</b> Row <br>
+  <b>8</b> Padding <br>
+  <b>9</b> Icon <br>
+  <b>10</b> Card <br>
+  <b>11</b> CircularProgressIndicator<br>
+  <b>12</b> PageView.builder<br>
+  <b>13</b> Transform<br>
   <b>14</b> Future, FutureBuilder
-  <b>15</b> PopupMenuButton
+  <b>15</b> PopupMenuButton<br>
   <b>16</b> CheckedPopupMenuItem
-  <b>17</b> RichText
-  <b>18</b> TapGestureRecognizer - for opening URL in a Text widget
-  <b>19</b> CustomScrollView
-  <b>20</b> GridTile
-  <b>21</b> AnimatedContainer
-  <b>22</b> ClipRRect
-  <b>23</b> BackdropFilter
-  <b>24</b> ImageFilter
+  <b>17</b> RichText<br>
+  <b>18</b> TapGestureRecognizer - for opening URL in a Text widget<br>
+  <b>19</b> CustomScrollView<br>
+  <b>20</b> GridTile<br>
+  <b>21</b> AnimatedContainer<br>
+  <b>22</b> ClipRRect<br>
+  <b>23</b> BackdropFilter<br>
+  <b>24</b> ImageFilter<br>
     
   
 
