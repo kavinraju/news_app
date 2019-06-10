@@ -1,6 +1,12 @@
 # news_app
 
-This app was made while learning Flutter.
+This app was made while learning Flutter. News are fetched from ![News API](https://newsapi.org/). Currently this app fetches data only the ![headlines](https://newsapi.org/docs/endpoints/top-headlines).
+
+## Screenshots
+![device-2019-06-10-164241](https://user-images.githubusercontent.com/24537737/59193347-07e6b100-8ba3-11e9-89d5-98720f00e54a.png)
+![device-2019-06-10-164317](https://user-images.githubusercontent.com/24537737/59193349-087f4780-8ba3-11e9-9cde-62d3d73409cb.png)
+![device-2019-06-10-164335](https://user-images.githubusercontent.com/24537737/59193351-087f4780-8ba3-11e9-8ce3-a4ba2dc3a9d7.png)
+![device-2019-06-10-164353](https://user-images.githubusercontent.com/24537737/59193352-0917de00-8ba3-11e9-9611-85f12121c887.png)
 
 ### Widgets used:
   <b>1</b> StatefulWidget <br>
@@ -16,9 +22,9 @@ This app was made while learning Flutter.
   <b>11</b> CircularProgressIndicator<br>
   <b>12</b> PageView.builder<br>
   <b>13</b> Transform<br>
-  <b>14</b> Future, FutureBuilder
+  <b>14</b> Future, FutureBuilder<br>
   <b>15</b> PopupMenuButton<br>
-  <b>16</b> CheckedPopupMenuItem
+  <b>16</b> CheckedPopupMenuItem<br>
   <b>17</b> RichText<br>
   <b>18</b> TapGestureRecognizer - for opening URL in a Text widget<br>
   <b>19</b> CustomScrollView<br>
